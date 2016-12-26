@@ -107,27 +107,39 @@ void Parser::CreateCell (TreeCell *root,
 
 void Parser::Parsing (TreeCell *root, Expression &expr, bool flag) {
 
+	// Порядок проверок задает приоритетность операций
 	for (int i = 0; i < expr.get_size (); ++i) {
-		// Порядок проверок задает приоритетность операций
 		if (expr.get_string_token (i) == "=") {
 			CreateCell (root, expr, "=", i, flag);
-			break;
+			return;
 		}
+	}
+
+	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "+")  {
 			CreateCell (root, expr, "+", i, flag);
-			break;
+			return;
 		}
+	}
+
+	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "-")  {
 			CreateCell (root, expr, "-", i, flag);
-			break;
+			return;
 		}
+	}
+
+	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "*")  {
 			CreateCell (root, expr, "*", i, flag);
-			break;
+			return;
 		}
+	}
+
+	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "/")  {
 			CreateCell (root, expr, "/", i, flag);
-			break;
+			return;
 		}
 	}
 }
