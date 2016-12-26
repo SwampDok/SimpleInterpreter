@@ -3,10 +3,13 @@
 
 #include <QMainWindow>
 
+#include <QDebug>
+
 #include <QVector>
 #include <QString>
 
 #include "parser.h"
+#include "treeexpressions.h"
 
 namespace Ui {
 	class MainWindow;
@@ -22,6 +25,8 @@ public:
 
 private slots:
 	void on_pushButton_get_tokens_clicked();
+
+	void on_pushButton_run_all_clicked();
 
 private:
 	Ui::MainWindow *ui;

@@ -45,13 +45,24 @@ void Parser::CreateCell (TreeCell *root,
                          Expression &expr,
                          const QString &operation,
                          int separator,
-                         TreeCell &first_cell) {
+                         bool flag) {
 
 	TreeCell *cell;
 	Expression tmp;
 	int i = separator;
 
 	cell = new TreeCell;
+
+	// Устанавливает указатель родителя
+	// флаг=1 - новая ячейка справа
+	// флаг=0 - новая ячейка слева
+	if (root != 0) {
+		if (flag == 0) {
+			root->left_cell = cell;
+		} else {
+			root->right_cell = cell;
+		}
+	}
 
 	// Обрабатываем левую часть выражения
 	for (int j = 0; j < i; ++j)
@@ -60,9 +71,7 @@ void Parser::CreateCell (TreeCell *root,
 	cell->left = tmp;
 	tmp.Clear ();
 
-	if (cell->left.get_size () > 1) {
-		cell->left_cell = new TreeCell;
-	} else {
+	if (cell->left.get_size () < 2) {
 		cell->left_cell = 0;
 	}
 
@@ -73,9 +82,7 @@ void Parser::CreateCell (TreeCell *root,
 	cell->right = tmp;
 	tmp.Clear ();
 
-	if (cell->right.get_size () > 1) {
-		cell->right_cell = new TreeCell;
-	} else {
+	if (cell->right.get_size () < 2) {
 		cell->right_cell = 0;
 	}
 
@@ -85,37 +92,41 @@ void Parser::CreateCell (TreeCell *root,
 	// Сохраняется адрес начала дерева
 	// Это будет корень дерева
 	// Он содержит операцию равно
-	if (root == 0)
-		first_cell = *cell;
+	if (root == 0 && root_ == 0)
+		root_ = cell;
 
 	// Обход левых ветвей
-	Parsing (cell, cell->left, first_cell);
+	if (cell->left.get_size () > 1)
+		Parsing (cell, cell->left, 0);
 	// Обход правых ветвей
-	Parsing (cell, cell->right, first_cell);
+	if (cell->right.get_size () > 1)
+		Parsing (cell, cell->right, 1);
+
+	return;
 }
 
-void Parser::Parsing (TreeCell *root, Expression &expr, TreeCell &first_cell) {
+void Parser::Parsing (TreeCell *root, Expression &expr, bool flag) {
 
 	for (int i = 0; i < expr.get_size (); ++i) {
 		// Порядок проверок задает приоритетность операций
 		if (expr.get_string_token (i) == "=") {
-			CreateCell (root, expr, "=", i, first_cell);
+			CreateCell (root, expr, "=", i, flag);
 			break;
 		}
 		if (expr.get_string_token (i) == "+")  {
-			CreateCell (root, expr, "+", i, first_cell);
+			CreateCell (root, expr, "+", i, flag);
 			break;
 		}
 		if (expr.get_string_token (i) == "-")  {
-			CreateCell (root, expr, "-", i, first_cell);
+			CreateCell (root, expr, "-", i, flag);
 			break;
 		}
 		if (expr.get_string_token (i) == "*")  {
-			CreateCell (root, expr, "*", i, first_cell);
+			CreateCell (root, expr, "*", i, flag);
 			break;
 		}
 		if (expr.get_string_token (i) == "/")  {
-			CreateCell (root, expr, "/", i, first_cell);
+			CreateCell (root, expr, "/", i, flag);
 			break;
 		}
 	}
@@ -125,13 +136,10 @@ bool Parser::CreateTrees (int &incorrect_line) {
 	if (lines_.empty ())
 		return false;
 
-	TreeCell root;
-	TreeExpressions tree;
-
 	for (int i = 0; i < lines_.size (); ++i) {
-		Parsing (0, lines_[i],root);
-		tree.set_root (&root);
-		trees_.push_back (tree);
+		Parsing (0, lines_[i], 1);
+		trees_.push_back (root_);
+
 	}
 
 	return true;
@@ -140,20 +148,14 @@ bool Parser::CreateTrees (int &incorrect_line) {
 void Parser::Clear () {
 	trees_.clear ();
 	ids_.clear ();
+	lines_.clear();
 }
 
-const TreeExpressions* Parser::get_tree (int id) {
+const TreeCell* Parser::get_tree (int id) {
 	if (trees_.empty ())
 		return 0;
 
-	return &trees_[id];
-}
-
-const QVector<TreeExpressions>* Parser::get_trees () {
-	if (trees_.empty ())
-		return 0;
-
-	return &trees_;
+	return trees_[id];
 }
 
 const Identifier* Parser::get_identifier (int id) {

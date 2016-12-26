@@ -39,3 +39,31 @@ void MainWindow::on_pushButton_get_tokens_clicked() {
 		}
 	}
 }
+
+QString PrintExpression (Expression &expr) {
+	QString tmp = "";
+	for (int i = 0; i < expr.get_size (); ++i)
+		tmp += expr.get_string_token (i);
+
+	return tmp;
+}
+
+void PrintTree (TreeCell *root) {
+	if (root == 0)
+		return;
+
+	qDebug() << PrintExpression (root->left) << root->operation << PrintExpression (root->right);
+	PrintTree (root->left_cell);
+	PrintTree (root->right_cell);
+}
+
+void MainWindow::on_pushButton_run_all_clicked() {
+	Parser p;
+	p.Clear ();
+	p.LexicalAnalysis (ui->textEdit_source->toPlainText ());
+	int i = 0;
+	p.CreateTrees (i);
+	qDebug () << "Count trees: " << p.get_count_trees ();
+
+	ui->statusBar->showMessage ("Синтасический анализ проведен!");
+}

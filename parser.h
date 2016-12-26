@@ -16,7 +16,12 @@
 class Parser
 {
 	// Список все деревьев по количеству строк кода
-	QVector<TreeExpressions> trees_;
+	// Хранит указатели на вершины деревьев
+	QVector<TreeCell*> trees_;
+
+	// Текущий корень дерева
+	TreeCell *root_ = 0;
+
 	// Список всех найденных переменных без повторений
 	QVector<Identifier> ids_;
 	// Список токенов/лексем по строкам
@@ -25,15 +30,16 @@ class Parser
 	QStringList key_words = {"=", "+", "-", "*", "/"};
 
 	// Метод создает ячейку дерева
+	// Флаг = 0 - значение пришло из левой ячейки
+	// Флаг = 1 - значение пришло из правой ячейки
 	void CreateCell (TreeCell *root,
 	                 Expression &expr,
 	                 const QString &operation,
-	                 int separator,
-	                 TreeCell &first_cell);
+	                 int separator, bool flag);
 
 	// В первой ячейке расположена операция присвоения
 	// При первом вызове передать 0 и исходное выражение
-	void Parsing(TreeCell *root, Expression &expr, TreeCell &first_cell);
+	void Parsing(TreeCell *root, Expression &expr, bool flag);
 
 public:
 	Parser();
@@ -55,7 +61,7 @@ public:
 	// Возвращает указатель на одно дерево
 	// Номер дерева соответсвует номеру строки
 	// Возвращает 0, если деревьев нет
-	const TreeExpressions* get_tree (int id);
+	const TreeCell *get_tree(int id);
 
 	// Возвращает указатель на список всех деревьев
 	// Возвращает 0, если деревьев нет
