@@ -3,6 +3,11 @@
 Identifier::Identifier(const QString &name, int value) :
   name_(name), value_(value) {}
 
+Identifier::Identifier(const QString &name) :
+  name_(name), value_(0) {}
+
+Identifier::Identifier() :
+  name_(""), value_(0) {}
 
 QString Identifier::get_name () const {
 	return name_;

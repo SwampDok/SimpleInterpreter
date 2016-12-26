@@ -13,8 +13,13 @@ struct TreeCell {
 	TreeCell *left_cell;
 	// Правый порожденный узел
 	TreeCell *right_cell;
-	// Содержимое данной ячейки дерева
-	Expression content;
+	// Операция данного узла
+	// например, "+", "-" и т.д.
+	QString operation;
+	// Левый операнд узла
+	Expression left;
+	// Правый операнд узла
+	Expression right;
 };
 
 /*
@@ -23,6 +28,7 @@ struct TreeCell {
  */
 class TreeExpressions
 {
+	// Корень дерева выражений
 	TreeCell *root_;
 public:
 	TreeExpressions ();

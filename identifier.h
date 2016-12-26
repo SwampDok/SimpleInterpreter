@@ -8,12 +8,15 @@
  */
 class Identifier
 {
+	// Имя переменной
 	QString name_;
+	// Значение переменной
 	int value_;
 
 public:
-
-	Identifier (const QString &name, int value = 0);
+	Identifier ();
+	Identifier (const QString &name);
+	Identifier (const QString &name, int value);
 
 	QString get_name () const;
 	int get_value () const;

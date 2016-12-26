@@ -15,6 +15,11 @@ Expression::Expression (const QVector<Token> &tokens) {
 	tokens_ << tokens;
 }
 
+
+void Expression::Clear () {
+	tokens_.clear ();
+}
+
 int Expression::get_size () {
 	return tokens_.size ();
 }

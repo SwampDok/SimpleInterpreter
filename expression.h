@@ -16,6 +16,9 @@ public:
 	// Параметры инициализируются нулям
 	Expression (const QVector<QString> &tokens);
 
+	// Удаляет все токены выражения
+	void Clear ();
+
 	int get_size();
 
 	Token get_token (int id);

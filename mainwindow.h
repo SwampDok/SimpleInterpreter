@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 
+#include <QVector>
+#include <QString>
+
+#include "parser.h"
+
 namespace Ui {
 	class MainWindow;
 }
@@ -14,6 +19,9 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+
+private slots:
+	void on_pushButton_get_tokens_clicked();
 
 private:
 	Ui::MainWindow *ui;
