@@ -19,6 +19,8 @@ class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
+	// Служит для получения дерева разбора выражений
+	Parser p_;
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
@@ -30,6 +32,8 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
+
+	void UpdateListTokens ();
 };
 
 #endif // MAINWINDOW_H

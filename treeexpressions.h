@@ -20,6 +20,8 @@ struct TreeCell {
 	Expression left;
 	// Правый операнд узла
 	Expression right;
+	//Флаг = 1 -- Ячейка вышла из правого выражения родительской ячейки
+	bool flag;
 };
 
 /*

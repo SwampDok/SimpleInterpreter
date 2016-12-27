@@ -93,13 +93,6 @@
         <item>
          <widget class="QListWidget" name="listWidget_tokens"/>
         </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_get_tokens">
-          <property name="text">
-           <string>Получить список лексем</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_3">

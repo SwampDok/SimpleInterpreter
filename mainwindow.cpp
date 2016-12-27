@@ -20,8 +20,19 @@ MainWindow::~MainWindow() {
 	delete ui;
 }
 
-void MainWindow::on_pushButton_get_tokens_clicked() {
+void MainWindow::UpdateListTokens () {
+	ui->listWidget_tokens->clear ();
+	QVector<Expression> lines = *p_.get_lines ();
+	for (int i = 0; i < lines.size (); ++i) {
+		ui->listWidget_tokens->addItem ("Строка " + QString::number (i) + ":");
 
+		for (int j = 0; j < lines[i].get_size (); ++j) {
+			ui->listWidget_tokens->addItem (lines[i].get_string_token (j) +
+			                                (lines[i].get_token (j).IsConstant () ? " Число" : "") +
+			                                (lines[i].get_token (j).IsIdentifir () ? " Идентификатор" : "") +
+			                                (lines[i].get_token (j).IsConstant () == false && lines[i].get_token (j).IsIdentifir () == false ? " Ключевое слово" : "") );
+		}
+	}
 }
 
 QString PrintExpression (Expression expr) {
@@ -42,30 +53,18 @@ void PrintTree (const TreeCell *root) {
 }
 
 void MainWindow::on_pushButton_run_all_clicked() {
-	Parser p;
-	p.Clear ();
-	p.LexicalAnalysis (ui->textEdit_source->toPlainText ());
-
-	//
-	ui->listWidget_tokens->clear ();
-	QVector<Expression> lines = *p.get_lines ();
-	for (int i = 0; i < lines.size (); ++i) {
-		ui->listWidget_tokens->addItem ("Строка " + QString::number (i) + ":");
-
-		for (int j = 0; j < lines[i].get_size (); ++j) {
-			ui->listWidget_tokens->addItem (lines[i].get_string_token (j) +
-			                                (lines[i].get_token (j).IsConstant () ? " Число" : "") +
-			                                (lines[i].get_token (j).IsIdentifir () ? " Идентификатор" : "") +
-			                                (lines[i].get_token (j).IsConstant () == false && lines[i].get_token (j).IsIdentifir () == false ? " Ключевое слово" : "") );
-		}
-	}
-	//
 
 	int i = 0;
-	p.CreateTrees (i);
-	qDebug () << "Count trees: " << p.get_count_trees ();
 
-	PrintTree (p.get_tree (0));
+	p_.Clear ();
+	p_.LexicalAnalysis (ui->textEdit_source->toPlainText ());
+
+	UpdateListTokens ();
+
+	p_.CreateTrees (i);
+	qDebug () << "Count trees: " << p_.get_count_trees ();
+
+	PrintTree (p_.get_tree (0));
 
 	ui->statusBar->showMessage ("Синтасический анализ проведен!");
 }

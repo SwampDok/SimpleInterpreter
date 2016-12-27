@@ -10,6 +10,8 @@ void Parser::LexicalAnalysis (const QString &source) {
 	bool ok1 = false;
 	bool ok2 = false;
 
+	lines_.clear ();
+
 	for (int i = 0; i < source.size (); ++i) {
 		if (source[i] == ' ' || source[i] == '\n' || source[i] == '\0') {
 			// Токен является ключевым словом
@@ -59,8 +61,10 @@ void Parser::CreateCell (TreeCell *root,
 	if (root != 0) {
 		if (flag == 0) {
 			root->left_cell = cell;
+			cell->flag = 0;
 		} else {
 			root->right_cell = cell;
+			cell->flag = 1;
 		}
 	}
 
@@ -92,7 +96,7 @@ void Parser::CreateCell (TreeCell *root,
 	// Сохраняется адрес начала дерева
 	// Это будет корень дерева
 	// Он содержит операцию равно
-	if (root == 0 && root_ == 0)
+	if (root == 0)
 		root_ = cell;
 
 	// Обход левых ветвей
@@ -115,28 +119,24 @@ void Parser::Parsing (TreeCell *root, Expression &expr, bool flag) {
 		}
 	}
 
+	// В цикле операции одного приоритета
 	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "+")  {
 			CreateCell (root, expr, "+", i, flag);
 			return;
 		}
-	}
-
-	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "-")  {
 			CreateCell (root, expr, "-", i, flag);
 			return;
 		}
 	}
 
+	// В цикле операции одного приоритета
 	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "*")  {
 			CreateCell (root, expr, "*", i, flag);
 			return;
 		}
-	}
-
-	for (int i = 0; i < expr.get_size (); ++i) {
 		if (expr.get_string_token (i) == "/")  {
 			CreateCell (root, expr, "/", i, flag);
 			return;
@@ -148,10 +148,12 @@ bool Parser::CreateTrees (int &incorrect_line) {
 	if (lines_.empty ())
 		return false;
 
+	trees_.clear ();
+	ids_.clear ();
+
 	for (int i = 0; i < lines_.size (); ++i) {
 		Parsing (0, lines_[i], 1);
 		trees_.push_back (root_);
-
 	}
 
 	return true;
@@ -163,7 +165,7 @@ void Parser::Clear () {
 	lines_.clear();
 }
 
-const TreeCell* Parser::get_tree (int id) {
+TreeCell* Parser::get_tree (int id) {
 	if (trees_.empty ())
 		return 0;
 

@@ -25,6 +25,8 @@ public:
 
 	QString get_string_token (int id);
 
+	void set_token (int id, const QString &value, bool identifir, bool constant);
+
 	void AddToken (const Token &token);
 
 	void AddToken (const QString &value);

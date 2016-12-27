@@ -32,6 +32,12 @@ QString Expression::get_string_token (int id) {
 	return tokens_[id].get_value ();
 }
 
+void Expression::set_token (int id, const QString &value, bool identifir, bool constant) {
+	tokens_[id].set_constant (constant);
+	tokens_[id].set_identifir (identifir);
+	tokens_[id].set_value (value);
+}
+
 void Expression::AddToken (const QString &value) {
 	Token token (value);
 	tokens_.push_back (token);
