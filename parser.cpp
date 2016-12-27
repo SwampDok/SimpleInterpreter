@@ -14,6 +14,9 @@ void Parser::LexicalAnalysis (const QString &source) {
 
 	for (int i = 0; i < source.size (); ++i) {
 		if (source[i] == ' ' || source[i] == '\n' || source[i] == '\0') {
+
+			// Удаляем символы конца строки
+			word.remove ("\n");
 			// Токен является ключевым словом
 			ok1 = key_words.contains (word);
 			if (ok1)
@@ -33,6 +36,7 @@ void Parser::LexicalAnalysis (const QString &source) {
 			// Конец строки
 			if (source[i] == '\n' || source[i] == '\0') {
 				lines_.push_back (expr);
+				expr.Clear ();
 			}
 
 			word.clear ();
@@ -92,6 +96,7 @@ void Parser::CreateCell (TreeCell *root,
 
 	cell->parent = root;
 	cell->operation = operation;
+	cell->viewed = false;
 
 	// Сохраняется адрес начала дерева
 	// Это будет корень дерева

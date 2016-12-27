@@ -10,6 +10,7 @@
 
 #include "parser.h"
 #include "treeexpressions.h"
+#include "implementer.h"
 
 namespace Ui {
 	class MainWindow;
@@ -21,6 +22,8 @@ class MainWindow : public QMainWindow
 
 	// Служит для получения дерева разбора выражений
 	Parser p_;
+
+	Implementer impl_;
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
@@ -34,6 +37,7 @@ private:
 	Ui::MainWindow *ui;
 
 	void UpdateListTokens ();
+	void UpdataTableIds ();
 };
 
 #endif // MAINWINDOW_H

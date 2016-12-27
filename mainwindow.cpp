@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	// Инициализируем исполнитель
+	impl_.set_parser (&p_);
+
 	QStringList headers = {"Идентифактор", "Значение"};
 
 
@@ -32,6 +35,23 @@ void MainWindow::UpdateListTokens () {
 			                                (lines[i].get_token (j).IsIdentifir () ? " Идентификатор" : "") +
 			                                (lines[i].get_token (j).IsConstant () == false && lines[i].get_token (j).IsIdentifir () == false ? " Ключевое слово" : "") );
 		}
+	}
+}
+
+void MainWindow::UpdataTableIds () {
+	ui->tableWidget_variables->clear ();
+	ui->tableWidget_variables->setRowCount (impl_.get_count_ids ());
+
+	QTableWidgetItem *MyItem=new QTableWidgetItem();
+
+
+	for (int i = 0; i < impl_.get_count_ids (); ++i) {
+		// Тут нужно добавить очистку память, так как каждный раз будет новая выделяться
+		MyItem = new QTableWidgetItem(impl_.get_id (i).get_name ());
+		ui->tableWidget_variables->setItem (i, 0,MyItem);
+
+		MyItem = new QTableWidgetItem(QString::number (impl_.get_id (i).get_value ()));
+		ui->tableWidget_variables->setItem (i, 1,MyItem);
 	}
 }
 
@@ -62,9 +82,10 @@ void MainWindow::on_pushButton_run_all_clicked() {
 	UpdateListTokens ();
 
 	p_.CreateTrees (i);
-	qDebug () << "Count trees: " << p_.get_count_trees ();
 
-	PrintTree (p_.get_tree (0));
+	impl_.Run ();
+
+	UpdataTableIds ();
 
 	ui->statusBar->showMessage ("Синтасический анализ проведен!");
 }

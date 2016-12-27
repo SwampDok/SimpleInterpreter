@@ -21,7 +21,9 @@ class Implementer
 	// Метод служит для рекурсивной обработки деревьев
 	// Флаг = 0 - выражение вышло из правой ячейки родителя
 	// Флаг = 1 - выражение вышло из правой ячейки родителя
-	void Run (TreeCell *cell, bool flag);
+	// error = 0 - значит ошибок нет, функция возвращает это значение
+	// error = 1 - деление на ноль
+	void Run(TreeCell *cell);
 public:
 	Implementer ();
 	Implementer (Parser *pars);
@@ -49,7 +51,7 @@ public:
 	const QVector<Identifier>* get_ids ();
 
 	// Возвращает указатель на идентификатор
-	const Identifier* get_id (int id);
+	Identifier get_id (int id);
 
 	// Возвращает значение идентификатора по имени
 	// Если такого идентификатора нет, то возвращает -1
