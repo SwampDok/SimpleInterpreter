@@ -89,3 +89,10 @@ void MainWindow::on_pushButton_run_all_clicked() {
 
 	ui->statusBar->showMessage ("Синтасический анализ проведен!");
 }
+
+void MainWindow::on_pushButton_clear_variables_clicked() {
+	impl_.ClearIds ();
+	UpdataTableIds ();
+}
+
+void MainWindow::on_pushButton_get_tokens_clicked() {}

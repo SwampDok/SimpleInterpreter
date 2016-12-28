@@ -33,6 +33,8 @@ private slots:
 
 	void on_pushButton_run_all_clicked();
 
+	void on_pushButton_clear_variables_clicked();
+
 private:
 	Ui::MainWindow *ui;
 
